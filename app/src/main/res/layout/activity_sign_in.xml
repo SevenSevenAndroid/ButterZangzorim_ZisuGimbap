@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="16dp"
-    tools:context=".SignInActivity">
+    tools:context=".signin.SignInActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id = "@+id/sign_in_id_input_container"

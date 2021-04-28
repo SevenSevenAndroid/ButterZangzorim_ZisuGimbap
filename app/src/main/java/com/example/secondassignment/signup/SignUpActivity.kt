@@ -1,4 +1,4 @@
-package com.example.secondassignment
+package com.example.secondassignment.signup
 
 import android.app.Activity
 import android.content.Intent

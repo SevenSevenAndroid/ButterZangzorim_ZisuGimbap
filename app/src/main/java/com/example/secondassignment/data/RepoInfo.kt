@@ -1,4 +1,4 @@
-package com.example.secondassignment
+package com.example.secondassignment.data
 
 data class RepoInfo (
     val repoName:String,

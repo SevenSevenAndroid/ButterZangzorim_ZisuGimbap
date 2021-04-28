@@ -1,16 +1,13 @@
-package com.example.secondassignment
+package com.example.secondassignment.signin
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
+import com.example.secondassignment.signup.SignUpActivity
 import com.example.secondassignment.databinding.ActivitySignInBinding
-import com.example.secondassignment.databinding.ActivitySignUpBinding
+import com.example.secondassignment.home.HomeActivity
 
 class SignInActivity : AppCompatActivity() {
 

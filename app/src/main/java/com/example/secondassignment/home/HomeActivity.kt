@@ -1,12 +1,11 @@
-package com.example.secondassignment
+package com.example.secondassignment.home
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.secondassignment.UserInfoActivity
+import com.example.secondassignment.data.RepoInfo
+import com.example.secondassignment.adapter.RepoListAdapter
 import com.example.secondassignment.databinding.ActivityHomeBinding
 
 
@@ -19,6 +18,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        searchFollowers()
 
         val repoListAdapter = RepoListAdapter()
         binding.recyclerviewRepository.adapter = repoListAdapter
@@ -50,6 +50,13 @@ class HomeActivity : AppCompatActivity() {
 
         repoListAdapter.notifyDataSetChanged()
 
+    }
+    fun searchFollowers(){
+        binding.buttonHomeMore.setOnClickListener {
+            val intent = Intent(this@HomeActivity, UserInfoActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
 }
