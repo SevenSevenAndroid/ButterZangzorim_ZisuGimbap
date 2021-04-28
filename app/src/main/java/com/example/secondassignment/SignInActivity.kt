@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.registerForActivityResult
-import com.example.secondassignment.databinding.ActivityMainBinding
+import com.example.secondassignment.databinding.ActivitySignInBinding
 import com.example.secondassignment.databinding.ActivitySignUpBinding
 
 class SignInActivity : AppCompatActivity() {
@@ -31,14 +31,14 @@ class SignInActivity : AppCompatActivity() {
 //        }
 //    }
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivitySignInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         Log.d("TAG","onCreate")
 
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         signInButtonClickEvent()
