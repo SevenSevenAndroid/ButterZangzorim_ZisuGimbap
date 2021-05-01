@@ -54,6 +54,10 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/item_repo">              
       ``` 
+      
+      ![KakaoTalk_20210428_193355885](https://user-images.githubusercontent.com/70841402/116640869-7b1b8b00-a9a6-11eb-87ab-76620453c70b.gif)
+
+      
     
 + 1차 세미나에서 만든 유저 정보 부분에 more이란 버튼 하나를 추가하기
   + more 버튼이 해야 할 일: 2차 세미나 시간에 만든 fragment를 가진 Activity를 띄워주기
@@ -80,3 +84,10 @@
                 }
             }
           ```       
+          
+          
+          ![KakaoTalk_20210428_193401631](https://user-images.githubusercontent.com/70841402/116640878-81116c00-a9a6-11eb-98f0-b9a32fb2797c.gif)
+
+          
+          
+
