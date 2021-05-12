@@ -26,6 +26,7 @@ class SignInActivity : AppCompatActivity() {
         signUpButtonStartClickEvent()
     }
 
+    // 요기에 쓰는 거였네
     private fun signInButtonClickEvent() {
         binding.buttonSignIn.setOnClickListener {
             var signInID = binding.editTextSignInIdInput.text
