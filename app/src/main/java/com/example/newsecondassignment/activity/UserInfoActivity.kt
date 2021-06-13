@@ -1,8 +1,9 @@
-package com.example.newsecondassignment
+package com.example.newsecondassignment.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
+import com.example.newsecondassignment.fragment.FollowingListFragment
+import com.example.newsecondassignment.R
 import com.example.newsecondassignment.databinding.ActivityUserInfoBinding
 
 class UserInfoActivity:AppCompatActivity() {

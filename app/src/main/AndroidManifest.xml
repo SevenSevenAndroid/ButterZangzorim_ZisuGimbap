@@ -12,15 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewSecondAssignment"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HomeActivity">
+        <activity android:name=".activity.HomeActivity">
 
         </activity>
-        <activity android:name=".RepoInfoActivity"></activity>
-        <activity android:name=".UserInfoActivity"></activity>
-        <activity android:name=".SignUpActivity">
+        <activity android:name=".activity.RepoInfoActivity"></activity>
+        <activity android:name=".activity.UserInfoActivity"></activity>
+        <activity android:name=".activity.SignUpActivity">
 
         </activity>
-        <activity android:name=".SignInActivity">
+        <activity android:name=".activity.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

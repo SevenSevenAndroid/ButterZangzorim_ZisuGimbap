@@ -1,8 +1,10 @@
-package com.example.newsecondassignment
+package com.example.newsecondassignment.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.newsecondassignment.RepoInfo
+import com.example.newsecondassignment.adapter.RepoListAdapter
 import com.example.newsecondassignment.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {

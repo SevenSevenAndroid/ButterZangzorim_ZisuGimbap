@@ -1,8 +1,9 @@
-package com.example.newsecondassignment
+package com.example.newsecondassignment.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsecondassignment.RepoInfo
 import com.example.newsecondassignment.databinding.ItemRepoBinding
 
 class RepoListAdapter:RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {

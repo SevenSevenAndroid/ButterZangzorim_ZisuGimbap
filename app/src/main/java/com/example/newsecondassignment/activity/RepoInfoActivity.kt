@@ -1,8 +1,9 @@
-package com.example.newsecondassignment
+package com.example.newsecondassignment.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.add
+import com.example.newsecondassignment.R
+import com.example.newsecondassignment.fragment.RepoListFragment
 import com.example.newsecondassignment.databinding.ActivityRepoInfoBinding
 
 class RepoInfoActivity : AppCompatActivity() {

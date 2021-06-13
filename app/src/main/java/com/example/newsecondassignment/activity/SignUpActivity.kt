@@ -1,4 +1,4 @@
-package com.example.newsecondassignment
+package com.example.newsecondassignment.activity
 
 import android.app.Activity
 import android.app.DatePickerDialog

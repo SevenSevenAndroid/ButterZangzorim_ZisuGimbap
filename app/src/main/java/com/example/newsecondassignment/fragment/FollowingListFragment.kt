@@ -1,12 +1,13 @@
-package com.example.newsecondassignment
+package com.example.newsecondassignment.fragment
 
-import android.os.Binder
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.newsecondassignment.FollowingUserInfo
+import com.example.newsecondassignment.adapter.FollowingListAdapter
 import com.example.newsecondassignment.databinding.FragmentFollowingListBinding
 
 

@@ -1,8 +1,9 @@
-package com.example.newsecondassignment
+package com.example.newsecondassignment.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsecondassignment.FollowingUserInfo
 import com.example.newsecondassignment.databinding.ItemFollowUserBinding
 
 // 1. Adapter를 만들기 위해서 RecyclerView의 Adapter를 상속 -> <> 안에는  데이터를 어떤 뷰로 바꿀지에 해당하는 뷰홀더가 들어감 -> 일단 비워둠
