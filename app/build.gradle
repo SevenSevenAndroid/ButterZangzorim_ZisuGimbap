@@ -60,4 +60,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     // retrofit2에서 gson 사용을 위한 컨버터
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
