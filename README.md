@@ -1,174 +1,225 @@
 # 28th BE SOPT
 
-## Android Seminar week4 Assignment
+## Android Seminar week7 Assignment
 
-![캡처](https://user-images.githubusercontent.com/70841402/118386974-45d59500-b656-11eb-9df7-f9f6120e1ca0.PNG)
+![image](https://user-images.githubusercontent.com/70841402/121808894-8e07c780-cc95-11eb-821e-9b4bd7dc695b.png)
 
-### Level1:안린이 탈출하기
-* 해당 링크를 보면서 로그인, 회원가입 통신 구현하기
+### Level1:안린이 탈출하기 - 1
 
-  ✔ [Retrofit2 공식문서](http://devflow.github.io/retrofit-kr/)
+1️⃣ SignIn Activity로 처음 들어왔을때 SharedPreference에서 ID/PW가 있다면?
+-> 로그인 과정을 건너뛴다
+
+https://user-images.githubusercontent.com/70841402/121809702-cd83e300-cc98-11eb-976d-e625f2ef4ba8.mp4
+
+▪ SignInActivity
+  ```kotlin
+      override fun onCreate(savedInstanceState: Bundle?) {
+
+        Log.d("TAG", "onCreate")
+
+        super.onCreate(savedInstanceState)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        searchUserAuthStorage()
+        setButtonEvent()
+    }  
   
-  ✔ [SOPT signIn/signUp](https://www.notion.so/API-f960755d414d4c8181c2e0516c4a82a7)
-  
-* PostMan 테스트 사진
-  - SignIn 
-      ![화면 캡처 2021-05-16 163912](https://user-images.githubusercontent.com/70841402/118389763-6c9bc780-b666-11eb-9248-de6d5da7bd03.png)
-      
-  - SignUp
-      ![화면 캡처 2021-05-16 155732](https://user-images.githubusercontent.com/70841402/118389767-76252f80-b666-11eb-9e72-8d80c31b9bc1.png)
-  
-* 회원가입 완료 + 로그인 완료 구현 gif
-  - 회원가입 완료
-   
-    ![ezgif com-gif-maker](https://user-images.githubusercontent.com/70841402/118389837-d7e59980-b666-11eb-9cb5-3ce33eb054b8.gif)
-    
-  - 로그인 완료
-   
-    ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/70841402/118389903-3ca0f400-b667-11eb-8986-79a937c8c14a.gif)
-    
-* retrofit interface
-
-  ```kotlin             
-  interface SoptService {
-      @POST("/login/signin")
-      fun postLogin(
-          @Body body:RequestLoginData
-      ): Call<ResponseLoginData>
-
-      // 서버에 POST라는 행위를 요청
-      // /login/signup이란 식별자에 해당하는 데이터를 body에 담아 보낸다
-      @POST("/login/signup")
-      fun postSignUp(
-          @Body body:RequestSignUpData
-      ):Call<ResponseSignUpData>
-  }          
+    private fun searchUserAuthStorage() {
+        with(SoptUserAuthStorage.getInstance(this)) {
+            if (hasUserData()) {
+                requestLogin(getUserData().let { RequestLoginData(it.id, it.password) })
+            }
+        }
+    }     
+    ...
   ``` 
   
-    ```kotlin             
-  object ServiceCreator {
-      private const val BASE_URL = "http://cherishserver.com"
+▪ SoptUserAuthStorage
 
-      private val retrofit:Retrofit = Retrofit.Builder()
-          .baseUrl(BASE_URL)
-          .addConverterFactory(GsonConverterFactory.create())
-          .build()
+  ```kotlin
+    ...
+    fun hasUserData(): Boolean {
+        with(getUserData()) {
+            return id.isNotEmpty() && password.isNotEmpty()
+        }
+    } 
 
-      val soptService:SoptService = retrofit.create(SoptService::class.java)
-  }       
-  ``` 
+    fun getUserData(): SoptUserInfo = SoptUserInfo(
+        id = sharedPreferences.getString(USER_ID_KEY, "") ?: "",
+        password = sharedPreferences.getString(USER_PW_KEY, "") ?: ""
+    )    
+    ...
+  ```
 
-*  callback 연결 부분
 
-    - SignIn
+
+2️⃣ 로그인할 때 성공하면 SharedPreference에 집어 넣는다.
+
+▪ SignInActivity
+  ```kotlin
   
-      ```kotlin             
-      private fun inputLoginInformation(){
-
-              // 서버로 보낼 id(email), password를 dataClass로 묶어준다
-              val requestLoginData = RequestLoginData(
-                  id = binding.editTextSignInIdInput.text.toString(),
-                  password = binding.editTextSignInPasswordInput.text.toString()
-              )
-
-              // 현재 사용자의 정보를 받아올 것을 암시
-              // 서버 통신은 I/O 작업 -> 비동적으로 받아올 Callback 내부 코드는 나중에
-              // 데이터를 받아오고 실행된다
-              val call: Call<ResponseLoginData> = ServiceCreator.soptService.postLogin(requestLoginData)
-
-              // enqueue 함수 -> Call이 비동기 작업 이후, 동작할 Callback을 등록할 수 있다
-              // 해당 함수 호출은 Callback을 등록만하고
-              // 실제 서버 통신을 요청한 이후, 통신 결과가 나왔을 때 실행된다
-              // object 키워드로 Callback을 구현할 익명 클래스 생성
-              call.enqueue(object : Callback<ResponseLoginData> {
-
-                  // 네트워크 통신 Response가 있는 경우, 해당 함수를 retrofit이 호출
-                  override fun onResponse(
-                      call: Call<ResponseLoginData>,
-                      response: Response<ResponseLoginData>
-                  ) {
-                      // 네트워크 통신에 성공한 경우, status 코드가 200~300일 때, 실행
-                      if (response.isSuccessful) {
-                          // response body 자체가 nullable 데이터
-                          // 서버에서 오는 data도 nullable
-                          val data = response.body()?.data
-                          // 통신 성공시 유저 닉네임을 보여준다
-                          Toast.makeText(this@SignInActivity, data?.user_nickname, Toast.LENGTH_SHORT).show()
-                          // 홈 화면으로 넘어감
-                          startHomeActivity()
-                      } else {
-                          // 네트워크 통신에 실패한 경우, status 코드가 200~300이 아닌 경우
-                          Toast.makeText(
-                              this@SignInActivity,
-                              "네트워크 통신 실패",
-                              Toast.LENGTH_SHORT
-                          ).show()
-                      }
-                  }
-
-                  // 네트워크 통신 자체가 실패한 경우, 해당 함수를 retrofit이 실행
-                  override fun onFailure(call: Call<ResponseLoginData>, t: Throwable) {
-                      Log.d("NetworkTest", "error:$t")
-                  }
-              })
-          }```
+      private fun setButtonEvent() {
+        with(binding) {
+            buttonSignIn.setOnClickListener { loginButtonClickEvent() }
+            buttonSignUpStart.setOnClickListener { signUpButtonStartClickEvent() }
+        }
+    }
+  
+      private fun loginButtonClickEvent() {
+        val requestLoginData = RequestLoginData(
+            id = binding.editTextSignInIdInput.text.toString(),
+            password = binding.editTextSignInPasswordInput.text.toString()
+        )
+        requestLogin(requestLoginData)
+    }
+  
+    private fun requestLogin(requestLoginData: RequestLoginData) {
+        val call: Call<ResponseLoginData> = ServiceCreator.soptService
+            .postLogin(requestLoginData)
+        call.enqueueUtil(
+            onSuccess = { response ->
+                val data = response.data
+                showToast(data?.user_nickname.toString())
+                with(SoptUserAuthStorage.getInstance(this)) {
+                    saveUserData(requestLoginData.let { SoptUserInfo(it.id, it.password) })
+                }
+                startHomeActivity()
+            }
+        )
+    }
+  ```
+▪ SoptUserAuthStorage
+  ```kotlin
+    ...
+    fun saveUserData(userData: SoptUserInfo) {
+        editor.putString(USER_ID_KEY, userData.id)
+            .putString(USER_PW_KEY, userData.password)
+            .apply()
+    } 
+    ...
+  ```
 
 
-    - SignUp
-    
-      ```kotlin             
-      private fun inputSignUpInformation() {
-          val requestSignUpData = RequestSignUpData(
-              email = binding.editTextSignUpIdInput.toString(),
-              password = binding.editTextSignUpPasswordInput.toString(),
-              sex = if (binding.radioButtonMan.isChecked()) "0" else "1",
-              nickname = binding.editTextSignUpNicknameInput.toString(),
-              phone = binding.editTextSignUpPhoneInput.toString(),
-              birth = binding.textViewSignUpBirthInput.toString()
-          )
+3️⃣ 서비스에서 로그아웃하면 SharedPreference를 clear한다.
 
-          val call: Call<ResponseSignUpData> =
-              ServiceCreator.soptService.postSignUp(requestSignUpData)
+https://user-images.githubusercontent.com/70841402/121809715-dc6a9580-cc98-11eb-9787-531ec6de4cf6.mp4
 
-          call.enqueue(object : Callback<ResponseSignUpData> {
-              override fun onResponse(
-                  call: Call<ResponseSignUpData>,
-                  response: Response<ResponseSignUpData>
-              ) {
-                  if (response.isSuccessful) {
+▪ HomeActivity
+  ```kotlin
+    private fun signOutButtonClickEvent() {
+        binding.buttonSignOut.setOnClickListener {
+            with(SoptUserAuthStorage.getInstance(this)) {
+                clearAuthStorage()
+            }
+            val intent = Intent(this@HomeActivity, SignInActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+  ```
 
-                      Toast.makeText(
-                          this@SignUpActivity,
-                          "회원가입 완료",
-                          Toast.LENGTH_SHORT
-                      ).show()
+▪ SoptUserAuthStorage
+  ```kotlin
+    ...
+    fun clearAuthStorage() {
+        sharedPreferences.edit()
+            .clear()
+            .apply()
+    }
+    ...
+  ```
 
-                      val intent = Intent()
-                      intent.putExtra(
-                          "SignUpNameExtra",
-                          binding.editTextSignUpNameInput.text.toString()
-                      )
-                      intent.putExtra("SignUpIDExtra", binding.editTextSignUpIdInput.text.toString())
-                      intent.putExtra(
-                          "SignUpPasswordExtra",
-                          binding.editTextSignUpPasswordInput.text.toString()
-                      )
-                      setResult(Activity.RESULT_OK, intent)
-                      finish()
+☑ 위와 같은 플로우로 마치 자동 로그인 처럼 할 수 있다.
 
-                  } else {
-                      Toast.makeText(
-                          this@SignUpActivity,
-                          "네트워크 통신 실패",
-                          Toast.LENGTH_SHORT
-                      ).show()
-                  }
-              }
-              override fun onFailure(call: Call<ResponseSignUpData>, t: Throwable) {
-                  Log.d("NetworkTest", "error:$t")
-              }
-          })
-      }```
+### Level1:안린이 탈출하기 - 2
+
+☑ 자신만의 방식으로 코드를 정리하고, SharedPreference 구현
+
+  ```kotlin
+class SoptUserAuthStorage private constructor(context: Context) {
+
+    private val sharedPreferences = context.getSharedPreferences(
+        "${context.packageName}.$STORAGE_KEY",
+        Context.MODE_PRIVATE
+    )
+
+    private val editor = sharedPreferences.edit()
+
+    fun saveUserData(userData: SoptUserInfo) {
+        editor.putString(USER_ID_KEY, userData.id)
+            .putString(USER_PW_KEY, userData.password)
+            .apply()
+    }
+
+    fun getUserData(): SoptUserInfo = SoptUserInfo(
+        id = sharedPreferences.getString(USER_ID_KEY, "") ?: "",
+        password = sharedPreferences.getString(USER_PW_KEY, "") ?: ""
+    )
+
+    fun hasUserData(): Boolean {
+        with(getUserData()) {
+            return id.isNotEmpty() && password.isNotEmpty()
+        }
+    }
+
+    fun clearAuthStorage() {
+        sharedPreferences.edit()
+            .clear()
+            .apply()
+    }
+
+    companion object {
+        private const val STORAGE_KEY = "user_auth"
+        private const val USER_ID_KEY = "user_id"
+        private const val USER_PW_KEY = "user_pw"
+
+        @Volatile
+        private var instance: SoptUserAuthStorage? = null
+
+        @JvmStatic
+        fun getInstance(context: Context) = instance ?: synchronized(this) {
+            instance ?: SoptUserAuthStorage(context).apply {
+                instance = this
+            }
+        }
+    }
+}
+  ```
+  
+☑ 확장함수
+
+▪ RetrofitEnqueueUtil
+
+  ```kotlin
+fun <ResponseType> Call<ResponseType>.enqueueUtil(
+    onSuccess: (ResponseType) -> Unit,
+    onError: ((stateCode: Int) -> Unit)? = null
+) {
+    this.enqueue(object : Callback<ResponseType> {
+        override fun onResponse(call: Call<ResponseType>, response: Response<ResponseType>) {
+            if (response.isSuccessful) {
+                onSuccess.invoke(response.body() ?: return)
+            } else {
+                onError?.invoke(response.code())
+            }
+        }
+
+        override fun onFailure(call: Call<ResponseType>, t: Throwable) {
+            Log.d("NetworkTest", "error:$t")
+        }
+    })
+}
+  ```
+  
+▪ ToastUtil
+  
+  ```kotlin
+fun Context.showToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+        .show()
+}
+  ```
       
 ### 과제를 통해 배우고 성장한 내용
-안드로이드 스튜디오에서 벗어나(?) 서버와 통신해볼 수 있어서 정말 신기하고 재밌었습니다. 하지만 완벽히 이해하고 선택 과제에서 안내해주신 것과 같은 다양한 api를 활용하기 위해서는 많은 노력이 필요할 것 같습니다. 이번에 수행한 필수 과제에 대한 이해가 더 깊어지면, '서버 연결은 여러번해서 익숙해지는 것 말고는 답이 없다.'라고 말씀하신 것처럼 여러번 시도해보고 실패해보고 에러도 마주쳐보겠습니다. 그리고 이 과정에서 에러를 해결하는 방법을 숙지하면, 서버 통신에 대해 조금 더 알아갈 수 있을 것 같습니다.
+이번 세미나에서 SharedPreference에 대해 배우고, 과제에서는 직접 자동 로그인과 로그아웃을 구현해보았습니다. 앱을 실행할 때마다 아이디와 비밀번호를 입력하는 과정이 불편했는데, SharedPreference를 통해 이런 불편함을 해소할 수 있어서 매우 신기하고 유익한 시간이었습니다. 하지만 SharedPreference를 다루는 것에 아직 서툴고 어려워서 제 자신만의 코드를 구성한 것이 아니라 안드로이드파트장님의 코드를 많이 참고했다는 것이 아쉬웠습니다. 지금까지 배워온 것을 복습하고, 아직 서툰 것은 스스로 공부해나가고, 앞으로 있을 행사에 참여하면서 더 큰 성장을 할 수 있도록 노력하겠습니다. 감사합니다. 😊
